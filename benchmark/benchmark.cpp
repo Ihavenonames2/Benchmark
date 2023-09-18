@@ -1,5 +1,7 @@
 #include <iostream>
 #include <functional>
+#include <vector>
+#include <algorithm>
 
 
 class Benchmark
@@ -22,7 +24,7 @@ public:
         }
         clock_t endtime = clock();
         
-        ExecuteTime = (static_cast<double>(endtime - starttime))/IterationCount;
+        ExecuteTime = static_cast<double>(endtime - starttime);
         
     }
     double run()
@@ -48,34 +50,34 @@ public:
     }
 };
 
-void func()
+void func(std::vector<int>& vec)
 {
-    char name[6];
-    strcpy_s(name, "vasya");
+    for (auto it : vec)
+        std::cout << it << " ";
 }
 
 int main()
 {
-   
+
     Benchmark benchmark;
     Benchmark benchmark1;
-
+    /*
     benchmark.SetIterationCount(100000);
     benchmark.SetTestCode([]
     ()
         { std::string name = "vasya"; }
     );
 
-    
+
 
     benchmark1.SetIterationCount(100000);
-    /*benchmark1.SetTestCode([]
+    benchmark1.SetTestCode([]
     ()
         { char name[6]; strcpy_s(name, "vasya"); }
     );
-    */
+
     benchmark1.SetTestCode(func);
-   
+
     std::cout << benchmark.run()<<std::endl;
     std::cout << benchmark1.run();
     std::cout << std::boolalpha<< std::endl;
@@ -83,6 +85,25 @@ int main()
     std::cout << (benchmark < benchmark1) << std::endl;
     std::cout << (benchmark == benchmark1) << std::endl;
     std::cout << (benchmark != benchmark1) << std::endl;
+    */
+
+    std::vector<int> vec {1, 2, 3 };
+    std::vector<int> vec1 {1, 2, 3 };
+
+    benchmark.SetIterationCount(1000);
+    benchmark.SetTestCode([&](){for (auto it : vec)
+        std::cout << it << " "; });
+
+    benchmark1.SetIterationCount(1000);
+    benchmark1.SetTestCode([&]() {auto print = [](const int& n) { std::cout << n << ' '; };
+
+    std::for_each(vec1.begin(), vec1.end(), print); });
+
+    std::cout << benchmark.run() << std::endl;
+    std::cout << benchmark1.run();
+
+
+
 
     return 0;
 }
