@@ -2,13 +2,14 @@
 #include <functional>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
-
+template<class T>
 class Benchmark
 {
 private:
     int IterationCount = 0;
-    double ExecuteTime = 0;
+    long long int ExecuteTime = 0;
 
 public:
     void SetIterationCount(int count)
@@ -17,15 +18,14 @@ public:
     }
     void SetTestCode(std::function<void()> callback)
     {
-        clock_t starttime = clock();
+        auto starttime = std::chrono::high_resolution_clock::now();
         for (int i = 0; i < IterationCount; ++i)
         {
             callback();
         }
-        clock_t endtime = clock();
+        auto endtime = std::chrono::high_resolution_clock::now();
         
-        ExecuteTime = static_cast<double>(endtime - starttime);
-        
+        ExecuteTime =  std::chrono::duration_cast<T>(endtime - starttime).count();
     }
     double run()
     {
@@ -59,8 +59,8 @@ void func(std::vector<int>& vec)
 int main()
 {
 
-    Benchmark benchmark;
-    Benchmark benchmark1;
+    Benchmark<std::chrono::milliseconds> benchmark;
+    Benchmark<std::chrono::milliseconds> benchmark1;
     /*
     benchmark.SetIterationCount(100000);
     benchmark.SetTestCode([]
@@ -99,7 +99,7 @@ int main()
 
     std::for_each(vec1.begin(), vec1.end(), print); });
 
-    std::cout << benchmark.run() << std::endl;
+    std::cout << std::fixed << benchmark.run() << std::endl;
     std::cout << benchmark1.run();
 
 

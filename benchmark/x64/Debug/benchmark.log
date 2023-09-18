@@ -1,2 +1,6 @@
 ﻿  benchmark.cpp
+C:\Users\38095\source\repos\benchmark\benchmark\benchmark.cpp(32,16): warning C4244: 'return': conversion from '__int64' to 'double', possible loss of data
+C:\Users\38095\source\repos\benchmark\benchmark\benchmark.cpp(30,12): message : while compiling class template member function 'double Benchmark<std::chrono::milliseconds>::run(void)'
+C:\Users\38095\source\repos\benchmark\benchmark\benchmark.cpp(102,48): message : see the first reference to 'Benchmark<std::chrono::milliseconds>::run' in 'main'
+C:\Users\38095\source\repos\benchmark\benchmark\benchmark.cpp(62,42): message : see reference to class template instantiation 'Benchmark<std::chrono::milliseconds>' being compiled
   benchmark.vcxproj -> C:\Users\38095\source\repos\benchmark\x64\Debug\benchmark.exe
