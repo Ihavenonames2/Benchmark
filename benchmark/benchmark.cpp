@@ -9,7 +9,8 @@ class Benchmark
 {
 private:
     int IterationCount = 0;
-    long long int ExecuteTime = 0;
+    double ExecuteTime = 0;
+    std::function<void()> callback;
 
 public:
     void SetIterationCount(int count)
@@ -18,6 +19,10 @@ public:
     }
     void SetTestCode(std::function<void()> callback)
     {
+        this->callback = callback;
+    }
+    double run()
+    {
         auto starttime = std::chrono::high_resolution_clock::now();
         for (int i = 0; i < IterationCount; ++i)
         {
@@ -25,10 +30,7 @@ public:
         }
         auto endtime = std::chrono::high_resolution_clock::now();
         
-        ExecuteTime =  std::chrono::duration_cast<T>(endtime - starttime).count();
-    }
-    double run()
-    {
+        ExecuteTime = (std::chrono::duration_cast<T>(endtime - starttime).count()) / static_cast<double>(IterationCount);
         return ExecuteTime;
     }
 
@@ -59,8 +61,8 @@ void func(std::vector<int>& vec)
 int main()
 {
 
-    Benchmark<std::chrono::milliseconds> benchmark;
-    Benchmark<std::chrono::milliseconds> benchmark1;
+    Benchmark<std::chrono::nanoseconds> benchmark;
+    Benchmark<std::chrono::nanoseconds> benchmark1;
     /*
     benchmark.SetIterationCount(100000);
     benchmark.SetTestCode([]
@@ -90,17 +92,24 @@ int main()
     std::vector<int> vec {1, 2, 3 };
     std::vector<int> vec1 {1, 2, 3 };
 
-    benchmark.SetIterationCount(1000);
-    benchmark.SetTestCode([&](){for (auto it : vec)
-        std::cout << it << " "; });
+    benchmark.SetIterationCount(10000000);
+    benchmark.SetTestCode([&](){
+        int sum = 0;
+        for (auto it : vec)
+        sum+=it; });
 
-    benchmark1.SetIterationCount(1000);
-    benchmark1.SetTestCode([&]() {auto print = [](const int& n) { std::cout << n << ' '; };
+    benchmark1.SetIterationCount(10000000);
+    benchmark1.SetTestCode([&]() {
+        int sum = 0;  
+        auto print = [&sum](const int& n) 
+        { sum += n; };
 
     std::for_each(vec1.begin(), vec1.end(), print); });
 
     std::cout << std::fixed << benchmark.run() << std::endl;
     std::cout << benchmark1.run();
+
+    
 
 
 

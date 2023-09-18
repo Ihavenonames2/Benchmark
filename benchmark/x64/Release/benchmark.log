@@ -1,0 +1,7 @@
+﻿  benchmark.cpp
+  Generating code
+  7 of 163 functions ( 4.3%) were compiled, the rest were copied from previous compilation.
+    6 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  benchmark.vcxproj -> C:\Users\38095\source\repos\benchmark\x64\Release\benchmark.exe
